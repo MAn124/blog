@@ -11,6 +11,8 @@
         $post_content = $_POST['post_content'];
         $post_images = $_FILES['post_images']['name'];
         $post_images_tmp = $_FILES['post_images']['tmp_name'];
+        $post_author = $_POST['post_author'];
+        
 
         if($post_title == '' || $post_desc == '' || $post_thumbnail == '' || $post_content == '' || $post_images == '') {
             echo "<script>alert('Not allow empty text field')</script>";
@@ -20,8 +22,8 @@
             move_uploaded_file($post_images_tmp,"./post_images/$post_thumbnail");
 
             $insert_query = "INSERT INTO post (category_id, post_title,post_desc,post_thumbnail	,post_content,
-        post_images,post_date)  VALUES ('$post_category','$post_title', '$post_desc', '$post_thumbnail', '$post_content',
-         '$post_images', NOW())";
+        post_images,post_date, post_author)  VALUES ('$post_category','$post_title', '$post_desc', '$post_thumbnail', '$post_content',
+         '$post_images', NOW(), '$post_author' )";
          $result_insert = mysqli_query($mysqli, $insert_query) or die(mysqli_error($mysqli));
          if($result_insert) {
             echo "<script>alert('Add success')</script>";
@@ -44,7 +46,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">Product
+                        <h1 class="page-header">Post
                             <small>Add</small>
                         </h1>
                     </div>
@@ -83,11 +85,27 @@
                                 <label>Content</label>
                                 <textarea class="form-control" rows="3" name="post_content"></textarea>
                             </div>
+                            <div class="form-group">
                             
+                            <select name="post_author" class="form-control">
+                               
+                                <?php
+                                $select_user = "SELECT * FROM user";
+                                $result = mysqli_query($mysqli, $select_user) or die(mysqli_error($mysqli));
+                                while($row = mysqli_fetch_array($result)) {
+                                    $user_id = $row['user_id'];
+                                    $user_name = $row['user_name'];
+                                   echo "<option value='$user_id'>$user_name</option>" ;
+                                }
+                            ?>
+                                
+                            </select>
+                        </div>
                             <div class="form-group">
                                 <label>Images</label>
                                 <input type="file" name="post_images">
                             </div>
+                         
                             <button name="post_add" type="submit" class="btn btn-default">Post Add</button>
                             <button type="reset" class="btn btn-default">Reset</button>
                         <form>

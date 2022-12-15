@@ -8,11 +8,15 @@
         $user_phone = $_POST['user_phone'];
         $user_email = $_POST['user_email'];
         $user_role = $_POST['user_role'];
+        $user_profile = $_POST['user_profile'];
+        $user_images = $_FILES['user_images']['name'];
+        $user_images_tmp = $_FILES['user_images']['tmp_name'];
 
-        $sql = "INSERT INTO user (user_name, user_password, user_email, user_phone, user_role)
-        VALUES ('$user_name', '$user_password', '$user_email', '$user_phone','$user_role')";
+        $sql = "INSERT INTO user (user_name, user_password, user_email, user_phone, user_role,user_profile, user_images)
+        VALUES ('$user_name', '$user_password', '$user_email', '$user_phone','$user_role','$user_profile','$user_images')";
         $result = mysqli_query($mysqli, $sql) or die(mysqli_error($mysqli));
         if($result) {
+            move_uploaded_file($user_images_tmp,"./user_images/$user_name");
             echo "<script>alert('Add success')</script>";
             echo "<script>window.open('user_list.php','_self')</script>";
         }
@@ -54,6 +58,14 @@
                             <div class="form-group">
                                 <label>Email</label>
                                 <input type="email" class="form-control" required="required" name="user_email" placeholder="Please Enter Email" />
+                            </div>
+                            <div class="form-group">
+                                <label>Profile</label>
+                                <textarea type="email" class="form-control" required="required" name="user_profile" placeholder="Please Enter Your Profile"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Images</label>
+                                <input type="file" class="form-control" required="required" name="user_images"  />
                             </div>
                             <div class="form-group">
                                 <label>User Level</label>
